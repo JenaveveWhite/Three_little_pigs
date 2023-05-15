@@ -4,12 +4,17 @@ class Program
 {
     static void Main(string[] args) {
 
+        Menu();
+    }
+    static void Menu() {
 
-        public int loop = 7;
+            var journal = new Journal();
 
-        int Menu() {
 
-            
+            while (true) {
+
+            var fileManager = new FileManager();
+
             Console.WriteLine("Please select one of the following choices:");
             Console.WriteLine("1. Write");
             Console.WriteLine("2. Display");
@@ -19,40 +24,44 @@ class Program
             Console.Write("What would you like to do? ");
             int numberChoice = int.Parse(Console.ReadLine());
 
-            for (loop = 7; true ) {
+            
 
                 if (numberChoice == 1) {
-                    Console.Write("Your response:");
-                    string response = Console.ReadLine();
-                    Entry.DisplayEntry();
+                    var entry = new Entry();
+                    entry.CreateEntry();
+                    journal._entries.Add(entry);
                 
                 }
 
                 if (numberChoice == 2) {
 
-                    Journal.EntryList();
+                    journal.DisplayEntryList();
                 
                 }
                 if (numberChoice == 3) {
-                
-                    FileManager.LoadJournal()
+                    
+                    journal = fileManager.LoadJournal();
                 
                 }
 
                 if (numberChoice == 4) {
                 
-                    FileManager.SaveJournal();
+                    fileManager.SaveJournal(journal);
                 
                 }
+
+                if (numberChoice == 5) {
+                Console.WriteLine("Thank you, Goodbye.");
+                break;
             }
 
-            if (numberChoice == 5) {
-                Console.WriteLine("Thank you, Goodbye.")
+
+  
                 
             }            
         }
 }
-}
+
 
 class Entry 
 {
@@ -65,16 +74,18 @@ class Entry
     public string _date;
     
     // methods
-    public string DisplayEntry() {
+    public void CreateEntry() {
         
+        var generator = new PromptGenerator();
+        randomPrompt = generator.RandomPrompt();
         Console.WriteLine($" {randomPrompt} ");
         Console.Write(" ");
-        string _text = Console.ReadLine();
+        _text = Console.ReadLine();
 
         DateTime theCurrentTime = DateTime.Now;
         _date = theCurrentTime.ToShortDateString();
 
-        return _date;
+        
     }
 }
 
@@ -114,7 +125,10 @@ class PromptGenerator
 
 class FileManager {
 
-    public void SaveJournal(Journal journal, string filename) {
+    public void SaveJournal(Journal journal) {
+
+        Console.Write("Please name file: ");
+        var filename = Console.ReadLine();
 
         using (StreamWriter outputFile = new StreamWriter(filename)) {
 
@@ -128,7 +142,10 @@ class FileManager {
         }
     }
 
-    public Journal LoadJournal(string filename) {
+    public Journal LoadJournal() {
+
+        Console.Write("Please name file: ");
+        var filename = Console.ReadLine();
 
         string[] lines = System.IO.File.ReadAllLines(filename);
         Journal journal = new Journal();
