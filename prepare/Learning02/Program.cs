@@ -38,7 +38,7 @@ public class Job
 public class resume 
 {
 
-public void DisplayResume(){
+public void DisplayResume(string title){
     Console.WriteLine($"Name: ");
     Console.WriteLine($"Job: {title}");
 }
