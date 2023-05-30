@@ -1,54 +1,49 @@
 using System;
 
-class Program
+class Program 
 {
     static void Main(string[] args)
     {
+        var personOne = new Person("Luke Skywalker");
 
-        //object 
-        //instance 
-        var layne = new Person("Layne", "Moseley");
-        var david = new Person("David", "Hasselhoff");
+        var BYUIPersonOne = new BYUIPerson("dhgsjgf", "ajhsgd");
 
+        var studentOne = new Student("name", "inumber", "major");
 
-        layne.Talk();
-        david.Talk();
     }
 }
 
-// classification
-class Person 
-{
+class Person{
+    protected string _name;
 
-    // attributes 
-    // properties 
-    string firstName;
-    string lastName;
-    
-    // constructor 
-
-    public Person(string fn, string ln) {
-        firstName = fn;
-        lastName = ln;
+    public Person(string name){
+        _name = name;
     }
-    // behaviors 
-    // method
-    public void Breathe(){
-        Console.WriteLine("Breathing");
+}
+
+class BYUIPerson: Person {
+    public BYUIPerson(string name, string iNumber) : base(name) {
+        _iNumber = iNumber;
     }
-     
-    public void Walk() { 
-        Console.WriteLine("Walking");
+    protected string _iNumber;
+}
+
+class Student: BYUIPerson {
+    public Student(string name, string iNumber, string major): base(name, iNumber){
+        _major = major;
     }
+    private string _iNumber;
 
-    public void Talk() {
-        Console.WriteLine($"Hi! my name is {FullName()}! ");
+    private string _major;
 
+}
+
+class Teacher: BYUIPerson {
+
+    public Teacher(string name, string iNumber, string department): base(name, iNumber) {
+        _department = department;
     }
+    private string _iNumber;
 
-    public string FullName(){
-
-        return $"{firstName} {lastName}";
-    }
-
+    private string _department;
 }
