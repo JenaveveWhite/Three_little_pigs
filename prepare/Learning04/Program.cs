@@ -42,6 +42,7 @@ class MathAssignment: Assignment{
     }
 
     public void GetHomeworkList() {
+
         Console.WriteLine($"{GetSummary}, List: {_textbookSection}, Problems: {_problems}");
     }
 }
@@ -58,3 +59,4 @@ class WritingAssignment: Assignment {
         Console.WriteLine($"{GetSummary}, List: {_title}");
     }
 }
+
