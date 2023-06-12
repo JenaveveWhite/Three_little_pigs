@@ -42,23 +42,40 @@ class Program {
             listeningList.Add("Who are some of your personal heroes?");
         var listeningActivity = new ListeningActivity(listeningList, listenStartMessage, listenEndMessage, "Listening Activity", listenDescription, 5);
         var breathingActivity = new BreathingActivity(breatheStartMessage, breatheEndMessage, "Breathing Activity", breatheDescription, 25);
+        
+        int choice = 0;
+        int duration = 0;
 
-        Console.WriteLine("Please choose an activty(Enter a number 1-3):");
-        Console.WriteLine("1. Reflecting Activity");
-        Console.WriteLine("2. Listening Activity");
-        Console.WriteLine("3. Breathing Activity");
-        int choice = Convert.ToInt32(Console.ReadLine());
+        while(choice != 4){
 
-        if(choice == 1) {
-            reflectingActivity.DisplayPrompt();
+            Console.WriteLine("Please choose an activty(Enter a number 1-3):");
+            Console.WriteLine("1. Reflecting Activity");
+            Console.WriteLine("2. Listening Activity");
+            Console.WriteLine("3. Breathing Activity");
+            Console.WriteLine("4. Quit");
+
+            choice = Convert.ToInt32(Console.ReadLine());
+            Console.Write("\b \b");
+
+            if(choice == 1) {
+                Console.WriteLine("How long would you like this activity to last?");
+                duration = Convert.ToInt32(Console.ReadLine());
+                reflectingActivity.DisplayPrompt(duration);
+
+            }
+            if(choice == 2){
+                Console.WriteLine("How long would you like this activity to last?");
+                duration = Convert.ToInt32(Console.ReadLine());
+                listeningActivity.DisplayQuestions(duration);
+
+            }
+            if(choice ==3){
+                Console.WriteLine("How long would you like this activity to last?");
+                duration = Convert.ToInt32(Console.ReadLine());
+                breathingActivity.BreatheCycle(duration,2,5);
+            }
+            
         }
-        if(choice == 2){
-            listeningActivity.DisplayQuestions();
-        }
-        if(choice ==3){
-            breathingActivity.BreatheCycle(25,2,5);
-        }
-    
 }
 
 class Activity {
@@ -78,12 +95,12 @@ class Activity {
     }
 
     public void DisplayStartMessage() {
-        Console.Write($"{_startMessage}");
+        Console.WriteLine($"{_startMessage}");
 
     }
 
     public void DisplayEndMessage() {
-        Console.Write($"{_endMessage}");
+        Console.WriteLine($"{_endMessage}");
 
     }
 
@@ -114,9 +131,6 @@ class Activity {
                 animationIndex = 0;
             }
         }
-
-        Console.WriteLine("Finished");
-
     }
         
     public void PauseWithCountdown(int duration){
@@ -129,15 +143,13 @@ class Activity {
 
             Console.Write("\b \b");
         }
-        
-        Console.WriteLine("Finished");
-
     }
 }
 
 class ReflectingActivity: Activity {
     private List<string> _prompts;
-    private Random _randomPrompt;
+    private Random _randomPrompt = new Random();
+
     private string randomPrompt;
 
     private List<string> _followUpQuestions; 
@@ -149,25 +161,35 @@ class ReflectingActivity: Activity {
         randomPrompt = prompts[intRandomPrompt];
     }
 
-    public void DisplayPrompt(){
+    public void DisplayPrompt(int duration){
+        var startTime = DateTime.Now;
+        var endTime = startTime.AddSeconds(duration);
+        int index = 1;
+
         DisplayStartMessage();
         PauseWithSpinner(3);
         Console.WriteLine(randomPrompt);
-        PauseWithSpinner(5);
-        Console.WriteLine(_followUpQuestions[1]);
-        Console.WriteLine(_followUpQuestions[2]);
-        Console.WriteLine(_followUpQuestions[3]);
-        Console.WriteLine(_followUpQuestions[4]);
-        Console.WriteLine(_followUpQuestions[5]);
-        DisplayEndMessage();
 
+        while(DateTime.Now < endTime) {
+        
+            Console.WriteLine(_followUpQuestions[index]);
+            index++;
+            if (index >= _followUpQuestions.Count){
+                index = 0;
+            }
+            
+            PauseWithSpinner(3);
+        
+        }
+        DisplayEndMessage();
     }
+    
 
 }
 
 class ListeningActivity: Activity {
     private List<string> _questions; 
-    private Random _randomQuestion;
+    private Random _randomQuestion = new Random();
     private string randomQuestions;
 
     public ListeningActivity(List<string> questions, string startMessage, string endMessage, string activityName, string description, int durationInSeconds): base(startMessage, endMessage, activityName, description, durationInSeconds){
@@ -176,12 +198,19 @@ class ListeningActivity: Activity {
         randomQuestions = questions[intQuestions];
     }
 
-    public void DisplayQuestions(){
+    public void DisplayQuestions(int duration){
         DisplayStartMessage();
         Console.WriteLine(randomQuestions);
         PauseWithCountdown(5);
-        Console.Write("");
-        DisplayEndMessage();
+        var startTime = DateTime.Now;
+        var endTime = startTime.AddSeconds(duration);
+        int count = 0;
+
+        while(DateTime.Now < endTime){
+            Console.ReadLine();
+            count++;
+        }
+        Console.WriteLine($"You had {count} entries. ");
     }
 }
 
