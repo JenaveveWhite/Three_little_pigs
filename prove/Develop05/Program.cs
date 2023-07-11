@@ -51,7 +51,9 @@ class Program
             } 
 
             if(choice ==2){
-                Console.WriteLine($"{goals}");
+                foreach( var goal in goals){
+                    Console.WriteLine($"{goal.GetDisplay()}");
+                }
                 continue;
             }
 
@@ -70,7 +72,17 @@ class Program
             }
 
             if(choice == 5){
-                RecordEvent(goals);
+                int num = 0;
+                foreach( var goal1 in goals){
+                    
+                    num += 1;
+                    Console.WriteLine($"{num}{goal1.GetDisplay()}");
+                }  
+                Console.WriteLine("Please pick an item from the list that you have completed.");            
+                var index = int.Parse(Console.ReadLine()) -1 ;
+                var goal = goals[index];
+                goal.RecordEvent();
+                points += goal.GetPoints();
                 continue;
 
             }
@@ -188,7 +200,7 @@ class Goal{
     }
 
     public Goal(){
-        GatherData();
+
     }
 
     virtual public void GatherData(){
@@ -201,9 +213,21 @@ class Goal{
         _points = int.Parse(Console.ReadLine());
 
     }
+    virtual public int GetPoints(){
+        return _points;
+    }
     virtual public string GetData(){
         return $"#{_name}#{_points}#{_isComplete}";
 
+    }
+    virtual public string GetDisplay(){
+        if(_isComplete == true){
+            return $" [X] {_name} ({_description})";
+
+        }
+        else {
+            return $" [ ] {_name} ({_description})";
+        }
     }
 
     virtual public void RecordEvent(){
@@ -223,8 +247,9 @@ class EternalGoal: Goal {
 
         base.GatherData();        
     }
+   
     public EternalGoal(){
-        base.GetData();
+        GatherData();
     }
     public override string GetData(){
         return $"Eternal#{_name}#{_points}#{_isComplete}";
@@ -241,7 +266,7 @@ class SimpleGoal: Goal{
 
     }
     public SimpleGoal(){
-        base.GatherData();
+        GatherData();
 
     }
     public override void GatherData(){
@@ -266,7 +291,7 @@ class CheckListGoal: Goal{
         _timesComplete = timesComplete;
     }
     public CheckListGoal(){
-        base.GatherData();
+        GatherData();
     }
     public override void GatherData(){
         base.GatherData();
@@ -276,7 +301,26 @@ class CheckListGoal: Goal{
         _bonus = int.Parse(Console.ReadLine());
         
     }
+    public override int GetPoints()
+    {
+        if(_timesComplete == _timesDetermined){
+            return _points+ _bonus;
+        }
+        else{
+            return _points;
+        }
+    }
 
+    public override string GetDisplay(){
+        if(_isComplete == true){
+            return $" [X] {_name} ({_description}) -- Currently completed: {_timesComplete}/{_timesDetermined}";
+
+        }
+        else {
+            return $" [ ] {_name} ({_description}) -- Currently completed: {_timesComplete}/{_timesDetermined}";
+        }
+
+    }
     public override string GetData(){
         return $"Checklist#{_name}#{_points}#{_isComplete}#{_timesDetermined}#{_timesComplete}#{_bonus}";
 
