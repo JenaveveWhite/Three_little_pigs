@@ -152,6 +152,7 @@ class Order: Product{
             label += $"{line.Name}, ID: {line.ProductID}";
         }
         return label;
+        
     }
 
     public string GetShippingLabel(){
